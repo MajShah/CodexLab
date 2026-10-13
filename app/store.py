@@ -1,9 +1,14 @@
+
 import json
 from pathlib import Path
 from typing import Any
 
 
-DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "tasks.json"
+DATA_FILE = (
+    Path(__file__).resolve().parent.parent
+    / "data"
+    / "tasks.json"
+)
 
 
 def load_tasks() -> list[dict[str, Any]]:
@@ -17,10 +22,15 @@ def load_tasks() -> list[dict[str, Any]]:
 
 def save_tasks(tasks: list[dict[str, Any]]) -> None:
     """Persist task records back to disk."""
+    DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
+
     with DATA_FILE.open("w", encoding="utf-8") as handle:
         json.dump(tasks, handle, indent=2)
 
 
 def next_task_id(tasks: list[dict[str, Any]]) -> int:
-    """Generate the next numeric ID based on the existing records."""
-    return max((task["id"] for task in tasks), default=0) + 1
+    """Generate the next numeric ID based on existing records."""
+    return max(
+        (task["id"] for task in tasks),
+        default=0,
+    ) + 1
